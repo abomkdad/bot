@@ -1,11 +1,602 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<title>MAD PARFUMEUR Assistant</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MAD PARFUMEUR Assistant</title>
+  <style>
+    :root{
+      --bg:#070707;
+      --panel:#0e0e10;
+      --card:#101013;
+      --line:rgba(255,255,255,.10);
+      --muted:rgba(255,255,255,.70);
+      --gold:#d4af37;
+      --gold2:rgba(212,175,55,.20);
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Arial;
+      background:
+        radial-gradient(1200px 600px at 70% 0%, rgba(212,175,55,.12), transparent 60%),
+        radial-gradient(800px 500px at 0% 40%, rgba(212,175,55,.08), transparent 60%),
+        var(--bg);
+      color:#fff;
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .topbar{
+      position:sticky;top:0;z-index:5;
+      background:linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.35));
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .brand{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    }
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.3px;
+    }
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(212,175,55,.35);
+      background:rgba(212,175,55,.08);
+      color:var(--gold);
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media(max-width:980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .panel{
+      background:linear-gradient(180deg, rgba(212,175,55,.08), transparent 45%), var(--panel);
+      border:1px solid rgba(212,175,55,.22);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHead{
+      padding:14px 14px 10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .panelHead .t{font-weight:800;margin:0 0 6px 0}
+    .panelHead .s{margin:0;color:var(--muted);font-size:12px}
+    .panelBody{padding:14px}
+    .inputRow{display:flex;gap:10px;flex-wrap:wrap}
+    .input{
+      flex:1;
+      min-width:240px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:#0b0b0d;
+      color:#fff;
+      outline:none;
+      font-size:14px;
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:11px 12px;
+      border-radius:14px;
+      border:1px solid rgba(212,175,55,.35);
+      background:rgba(212,175,55,.10);
+      color:#fff;
+      cursor:pointer;
+      font-weight:800;
+      font-size:13px;
+      text-decoration:none;
+      user-select:none;
+    }
+    .btn:hover{background:rgba(212,175,55,.18)}
+    .btnSolid{
+      border:0;
+      background:var(--gold);
+      color:#000;
+    }
+    .btnSolid:hover{filter:brightness(1.04)}
+    .hint{
+      margin-top:10px;
+      color:#bdbdbd;
+      font-size:12px;
+      line-height:1.5;
+    }
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .chip{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .chip:hover{border-color:rgba(212,175,55,.30)}
+    .cards{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 70%), var(--card);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      padding:12px;
+    }
+    .cardTitle{font-weight:900;margin:0 0 6px 0}
+    .cardMeta{margin:0;color:rgba(255,255,255,.78);font-size:12px;line-height:1.35}
+    .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .splitTitle{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin:0 0 10px 0;
+    }
+    .splitTitle h2{margin:0;font-size:14px}
+    .small{color:var(--muted);font-size:12px}
+
+    /* Floating chat bubble */
+    #madChatBtn{
+      position:fixed;bottom:18px;left:18px;
+      width:58px;height:58px;border-radius:999px;
+      border:1px solid rgba(212,175,55,.35);
+      background:linear-gradient(180deg, rgba(212,175,55,.22), rgba(212,175,55,.08));
+      color:#000;
+      box-shadow:0 18px 45px rgba(0,0,0,.55);
+      cursor:pointer;
+      font-size:22px;
+      display:flex;align-items:center;justify-content:center;
+      z-index:9999;
+    }
+    #madChatPanel{
+      position:fixed;bottom:86px;left:18px;
+      width:min(430px,calc(100vw - 36px));
+      height:590px;
+      background:linear-gradient(180deg, rgba(212,175,55,.10), transparent 40%), #0c0c0e;
+      border:1px solid rgba(212,175,55,.25);
+      border-radius:18px;
+      box-shadow:0 22px 60px rgba(0,0,0,.65);
+      overflow:hidden;
+      z-index:9999;
+      display:none;
+    }
+    .chatHead{
+      padding:12px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
+    .chatHead .left{display:flex;flex-direction:column;gap:2px}
+    .chatHead .name{font-weight:900;font-size:13px}
+    .chatHead .sub{font-size:12px;color:rgba(255,255,255,.70)}
+    .xbtn{background:transparent;border:0;color:#fff;font-size:18px;cursor:pointer}
+    .chatBody{
+      height:460px;
+      overflow:auto;
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .msg{
+      max-width:86%;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      font-size:13px;
+      line-height:1.4;
+      white-space:pre-wrap;
+    }
+    .msg.user{
+      margin-inline-start:auto;
+      background:#1a1a1f;
+      border-color:rgba(255,255,255,.08);
+    }
+    .msg.bot{
+      background:#0f0f12;
+      border-color:rgba(212,175,55,.22);
+    }
+    .chatFoot{
+      padding:10px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex;gap:8px;
+      background:#0b0b0d;
+    }
+    .chatInput{
+      flex:1;
+      padding:11px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:#111114;
+      color:#fff;
+      outline:none;
+      font-size:13px;
+    }
+  </style>
 </head>
 <body>
-<h1>MAD PARFUMEUR Assistant</h1>
-<p>تم تجهيز المشروع بنجاح. اربطه مع GitHub Pages.</p>
+
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <h1>MAD PARFUMEUR Assistant</h1>
+        <div class="badge" id="status">Loading data…</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="grid">
+      <!-- Search Panel -->
+      <section class="panel">
+        <div class="panelHead">
+          <p class="t">ابحث عن عطر أو كود أو اسم فرع</p>
+          <p class="s">يدعم العربية والعبرية • المنتجات من RSS • الفروع من branches.json</p>
+        </div>
+        <div class="panelBody">
+          <div class="inputRow">
+            <input id="q" class="input" placeholder='مثال: 132 / Bruno / نيش / ام الفحم / חיפה' />
+            <button id="askAiTop" class="btn btnSolid" type="button">🤖 اسأل المساعد</button>
+          </div>
+
+          <div class="chips">
+            <div class="chip" data-q="رجالي">رجالي</div>
+            <div class="chip" data-q="نسائي">نسائي</div>
+            <div class="chip" data-q="نيش">نيش</div>
+            <div class="chip" data-q="فروع">فروع</div>
+            <div class="chip" data-q="ام الفحم">ام الفحم</div>
+            <div class="chip" data-q="חיפה">חיפה</div>
+          </div>
+
+          <div class="hint">
+            🔸 إذا كتبت <b>مدينة/فرع</b> → يعطيك ساعات + Waze + اتصال<br>
+            🔸 إذا كتبت <b>اسم عطر/كود</b> → يعطيك منتجات + زر شراء<br>
+            🔸 زر <b>اسأل المساعد</b> يعطي جواب ذكي (بعد ربط Cloudflare Worker)
+          </div>
+
+          <div class="cards" id="results"></div>
+        </div>
+      </section>
+
+      <!-- Branches Panel -->
+      <aside class="panel">
+        <div class="panelHead">
+          <div class="splitTitle">
+            <h2>الفروع</h2>
+            <span class="small">خدمة العملاء: <b>*99935</b></span>
+          </div>
+          <p class="s">اضغط Waze أو Call</p>
+        </div>
+        <div class="panelBody">
+          <div class="cards" id="branches"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Floating chat -->
+  <button id="madChatBtn" title="MAD Assistant">💬</button>
+  <div id="madChatPanel">
+    <div class="chatHead">
+      <div class="left">
+        <div class="name">MAD Assistant</div>
+        <div class="sub">اقتراح عطور • فروع • شراء</div>
+      </div>
+      <button class="xbtn" id="madChatClose">×</button>
+    </div>
+    <div class="chatBody" id="chatBody"></div>
+    <div class="chatFoot">
+      <input class="chatInput" id="chatInput" placeholder="اكتب سؤالك… / כתבו שאלה…" />
+      <button class="btn btnSolid" id="chatSend" type="button">Send</button>
+      <button class="btn" id="chatAskAi" type="button">🤖 AI</button>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   CONFIG
+========================= */
+// ضع رابط Cloudflare Worker هنا لاحقًا:
+const AI_ENDPOINT = ""; // مثال: "https://YOUR-WORKER.workers.dev/api/ask"
+const CUSTOMER_SERVICE = "*99935";
+
+/* =========================
+   Utils
+========================= */
+const norm = s => (s||"").toString().trim().toLowerCase().replace(/\s+/g," ");
+const esc = s => (s||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const extractCode = q => (q||"").match(/\\b(\\d{2,6})\\b/)?.[1] || "";
+
+/* =========================
+   Data
+========================= */
+let PRODUCTS = [];  // data/products.all.json => {generatedAt, items:[...]}
+let BRANCHES = [];  // data/branches.json => Array (كما ملفك)
+
+/* =========================
+   Search logic
+========================= */
+function scoreProduct(q, p){
+  const nq = norm(q);
+  if (!nq) return 0;
+  const name = norm(p.name);
+  const code = norm(p.code);
+  if (code && nq === code) return 100;
+  if (name === nq) return 95;
+  if (name.includes(nq)) return 80;
+
+  const qt = new Set(nq.split(" ").filter(Boolean));
+  const nt = new Set(name.split(" ").filter(Boolean));
+  let hit = 0; qt.forEach(t => { if (nt.has(t)) hit++; });
+  return Math.min(70, hit * 14);
+}
+
+function branchMatchesQuery(b, q){
+  const nq = norm(q);
+  if (!nq) return false;
+
+  const fields = [b.nameAr, b.nameHe, b.hoursAr, b.hoursHe].map(norm);
+  if (fields.some(f => f.includes(nq))) return true;
+
+  const branchWords = ["فرع","فروع","ساعات","دوام","عنوان","waze","סניף","סניפים","שעות","כתובת","שעות עבודה"];
+  if (branchWords.some(w => nq.includes(norm(w)))) return true;
+
+  return false;
+}
+
+function renderProductCard(p){
+  const meta = [
+    p.code ? `Code: ${p.code}` : "",
+    p.lang ? `Lang: ${p.lang}` : "",
+    p.source ? `Site: ${p.source}` : ""
+  ].filter(Boolean).join(" • ");
+
+  return `
+    <div class="card">
+      <div class="cardTitle" dir="auto">${esc(p.name)}</div>
+      <p class="cardMeta" dir="auto">${esc(meta)}</p>
+      <div class="cardActions">
+        <a class="btn btnSolid" href="${esc(p.url)}" target="_blank" rel="noopener">🛒 شراء</a>
+      </div>
+    </div>
+  `;
+}
+
+function renderBranchCard(b){
+  const phoneHref = b.phone ? `tel:${esc(b.phone)}` : "";
+  return `
+    <div class="card">
+      <div class="cardTitle" dir="auto">${esc(b.nameAr || "")} / ${esc(b.nameHe || "")}</div>
+      <p class="cardMeta" dir="auto">
+        ${b.hoursAr ? esc(b.hoursAr) : ""}<br>
+        ${b.hoursHe ? esc(b.hoursHe) : ""}
+      </p>
+      <div class="cardActions">
+        ${b.directLink ? `<a class="btn" href="${esc(b.directLink)}" target="_blank" rel="noopener">📍 Waze</a>` : ""}
+        ${b.phone ? `<a class="btn btnSolid" href="${phoneHref}">📞 Call</a>` : ""}
+      </div>
+    </div>
+  `;
+}
+
+function renderBranchesSidebar(){
+  const box = document.getElementById("branches");
+  box.innerHTML = BRANCHES.map(renderBranchCard).join("") || `<div class="card"><div class="cardTitle">لا توجد فروع</div></div>`;
+}
+
+function renderResults(q){
+  const box = document.getElementById("results");
+  const query = (q||"").trim();
+  if (!query){
+    box.innerHTML = `
+      <div class="card">
+        <div class="cardTitle">ابدأ بالبحث</div>
+        <p class="cardMeta">اكتب اسم عطر/كود أو اسم مدينة/فرع.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const branchIntent = ["فرع","فروع","ساعات","دوام","סניפים","סניף","שעות"].some(w => norm(query).includes(norm(w)));
+  const branchHits = BRANCHES.filter(b => branchMatchesQuery(b, query)).slice(0, 8);
+
+  const code = extractCode(query);
+  const productHits = PRODUCTS
+    .map(p => ({p, s: Math.max(scoreProduct(query, p), code ? scoreProduct(code, p) : 0)}))
+    .filter(o => o.s > 20)
+    .sort((a,b)=>b.s-a.s)
+    .slice(0, 12)
+    .map(o => o.p);
+
+  let html = "";
+
+  // branches first when intent or no products
+  if (branchHits.length && (branchIntent || productHits.length === 0)){
+    html += `
+      <div class="card">
+        <div class="cardTitle">نتائج الفروع</div>
+        <p class="cardMeta">اضغط Waze أو Call • خدمة العملاء ${CUSTOMER_SERVICE}</p>
+      </div>
+    `;
+    html += branchHits.map(renderBranchCard).join("");
+  }
+
+  if (productHits.length){
+    html += `
+      <div class="card">
+        <div class="cardTitle">نتائج المنتجات</div>
+        <p class="cardMeta">اضغط شراء لفتح صفحة المنتج</p>
+      </div>
+    `;
+    html += productHits.map(renderProductCard).join("");
+  }
+
+  if (!branchHits.length && !productHits.length){
+    html = `
+      <div class="card">
+        <div class="cardTitle">ما لقيت نتيجة</div>
+        <p class="cardMeta">جرّب الاسم أو الكود (مثال: 132) أو اكتب اسم المدينة.</p>
+      </div>
+    `;
+  }
+
+  box.innerHTML = html;
+}
+
+/* =========================
+   AI (optional)
+========================= */
+async function askAI(question){
+  if (!AI_ENDPOINT){
+    alert("AI غير مربوط بعد. لازم نضيف Cloudflare Worker ونحط رابط AI_ENDPOINT داخل index.html");
+    return;
+  }
+  const st = document.getElementById("status");
+  st.textContent = "AI thinking…";
+
+  const res = await fetch(AI_ENDPOINT, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      question,
+      products: PRODUCTS.slice(0, 250), // worker سيقتطع داخليًا
+      branches: BRANCHES
+    })
+  });
+
+  const data = await res.json().catch(()=>({}));
+  st.textContent = `Ready • Products: ${PRODUCTS.length} • Branches: ${BRANCHES.length}`;
+
+  if (!res.ok || !data.answer){
+    console.error(data);
+    alert("AI Error");
+    return;
+  }
+  return data.answer;
+}
+
+/* =========================
+   Chat UI
+========================= */
+const chatBtn = document.getElementById("madChatBtn");
+const chatPanel = document.getElementById("madChatPanel");
+const chatClose = document.getElementById("madChatClose");
+const chatBody = document.getElementById("chatBody");
+const chatInput = document.getElementById("chatInput");
+const chatSend = document.getElementById("chatSend");
+const chatAskAi = document.getElementById("chatAskAi");
+
+function addMsg(text, who="bot"){
+  const d = document.createElement("div");
+  d.className = "msg " + (who==="user" ? "user" : "bot");
+  d.textContent = text;
+  chatBody.appendChild(d);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+chatBtn.onclick = () => {
+  chatPanel.style.display = (chatPanel.style.display === "block") ? "none" : "block";
+  if (chatPanel.style.display === "block" && chatBody.childElementCount === 0){
+    addMsg("أهلاً! أنا مساعد MAD PARFUMEUR.\nاكتب اسم العطر/الكود أو المدينة.\nللخدمة السريعة: " + CUSTOMER_SERVICE, "bot");
+  }
+  chatInput.focus();
+};
+chatClose.onclick = () => chatPanel.style.display = "none";
+
+chatSend.onclick = () => {
+  const q = chatInput.value.trim();
+  if (!q) return;
+  chatInput.value = "";
+  addMsg(q, "user");
+
+  // “رد سريع” بدون AI: نعرض أفضل نتائج في الشات
+  const branchHits = BRANCHES.filter(b => branchMatchesQuery(b, q)).slice(0, 2);
+  const code = extractCode(q);
+  const productHits = PRODUCTS
+    .map(p => ({p, s: Math.max(scoreProduct(q, p), code ? scoreProduct(code, p) : 0)}))
+    .filter(o => o.s > 20)
+    .sort((a,b)=>b.s-a.s)
+    .slice(0, 3)
+    .map(o => o.p);
+
+  if (branchHits.length){
+    const b = branchHits[0];
+    addMsg(`فرع: ${b.nameAr} / ${b.nameHe}\n${b.hoursAr}\n${b.phone}\nWaze: ${b.directLink}`, "bot");
+  }
+  if (productHits.length){
+    const p = productHits[0];
+    addMsg(`منتج مقترح: ${p.name}${p.code ? " (Code: "+p.code+")" : ""}\nرابط الشراء: ${p.url}`, "bot");
+  }
+  if (!branchHits.length && !productHits.length){
+    addMsg("ما لقيت نتيجة مباشرة. جرّب اسم/كود أو اكتب (فروع).", "bot");
+  }
+};
+
+chatInput.addEventListener("keydown", (e)=>{ if (e.key==="Enter") chatSend.click(); });
+
+chatAskAi.onclick = async () => {
+  const q = chatInput.value.trim() || prompt("اكتب سؤالك للمساعد:") || "";
+  if (!q.trim()) return;
+  addMsg(q, "user");
+  const ans = await askAI(q);
+  if (ans) addMsg(ans, "bot");
+};
+
+document.getElementById("askAiTop").onclick = async () => {
+  const q = document.getElementById("q").value.trim() || prompt("اكتب سؤالك للمساعد:") || "";
+  if (!q.trim()) return;
+  const ans = await askAI(q);
+  if (ans) alert(ans);
+};
+
+/* =========================
+   Load data
+========================= */
+async function loadData(){
+  const st = document.getElementById("status");
+  try{
+    const [p, b] = await Promise.all([
+      fetch("./data/products.all.json", { cache:"no-store" }).then(r=>r.json()).catch(()=>({items: []})),
+      fetch("./data/branches.json", { cache:"no-store" }).then(r=>r.json())
+    ]);
+
+    PRODUCTS = p.items || [];
+    BRANCHES = Array.isArray(b) ? b : (b.branches || []);
+    st.textContent = `Ready • Products: ${PRODUCTS.length} • Branches: ${BRANCHES.length}`;
+
+    renderBranchesSidebar();
+
+    const q = document.getElementById("q");
+    q.addEventListener("input", ()=>renderResults(q.value));
+    renderResults("");
+
+    document.querySelectorAll(".chip").forEach(ch => {
+      ch.onclick = () => {
+        q.value = ch.getAttribute("data-q") || "";
+        renderResults(q.value);
+        q.focus();
+      };
+    });
+
+  }catch(e){
+    console.error(e);
+    st.textContent = "Failed to load data";
+    document.getElementById("results").innerHTML = `
+      <div class="card">
+        <div class="cardTitle">خطأ تحميل البيانات</div>
+        <p class="cardMeta">تأكد من وجود data/branches.json و data/products.all.json</p>
+      </div>
+    `;
+  }
+}
+loadData();
+</script>
+
 </body>
 </html>
