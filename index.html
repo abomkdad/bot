@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MAD PARFUMEUR Assistant</title>
+  <meta name="description" content="مساعد MAD PARFUMEUR - بحث منتجات وفروع + اقتراحات سريعة (بدون سيرفر)." />
+
+  <style>
+    :root{
+      --bg:#0b0b0c;
+      --card:#121214;
+      --text:#f5f2e9;
+      --muted:#b8b1a2;
+      --gold:#d4af37;
+      --gold2:#b58c2a;
+      --line:rgba(212,175,55,.16);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius2: 26px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 700px at 70% -10%, rgba(212,175,55,.14), transparent 60%),
+        radial-gradient(900px 500px at 10% 0%, rgba(212,175,55,.08), transparent 60%),
+        linear-gradient(180deg, #070708, #0b0b0c 35%, #070708);
+      color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans Arabic", "Noto Sans Hebrew", sans-serif;
+      min-height:100vh;
+    }
+    .wrap{max-width:1100px;padding:28px 18px 100px;margin:0 auto;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;}
+    .brand{display:flex;flex-direction:column;gap:6px;}
+    .brand h1{margin:0;font-weight:800;letter-spacing:.8px;font-size: clamp(22px, 3vw, 34px);}
+    .brand p{margin:0;color:var(--muted);font-size:14px;line-height:1.4;}
+    .pill{display:inline-flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:999px;background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));box-shadow: 0 10px 30px rgba(0,0,0,.25);color:var(--muted);font-size:13px;white-space:nowrap;}
+    .pill b{color:var(--text);font-weight:700}
+    .pill .dot{width:10px;height:10px;border-radius:999px;background:var(--gold);box-shadow: 0 0 0 4px rgba(212,175,55,.15);flex:0 0 auto;}
+    .grid{display:grid;grid-template-columns: 1.25fr .75fr;gap:16px;}
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--line);border-radius:var(--radius2);box-shadow: var(--shadow);overflow:hidden;}
+    .card .hd{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 10px;border-bottom:1px solid rgba(212,175,55,.09);background:linear-gradient(180deg, rgba(212,175,55,.08), rgba(255,255,255,0));}
+    .card .hd h2{margin:0;font-size:16px;letter-spacing:.2px;}
+    .card .bd{padding:16px}
+    .searchRow{display:flex;gap:10px;align-items:center;}
+    .input{flex:1;background:rgba(0,0,0,.35);border:1px solid rgba(212,175,55,.18);color:var(--text);border-radius:14px;padding:12px 14px;outline:none;font-size:15px;}
+    .btn{cursor:pointer;border:1px solid rgba(212,175,55,.25);color:#121214;background:linear-gradient(180deg, var(--gold), var(--gold2));padding:12px 14px;border-radius:14px;font-weight:800;letter-spacing:.2px;box-shadow: 0 14px 30px rgba(212,175,55,.14);transition: transform .12s ease;}
+    .btn:active{transform: translateY(1px)}
+    .btn.secondary{background:rgba(0,0,0,.35);color:var(--text);border-color:rgba(212,175,55,.18);box-shadow:none;font-weight:700;}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+    .chip{cursor:pointer;padding:7px 10px;border-radius:999px;border:1px solid rgba(212,175,55,.18);background:rgba(0,0,0,.28);color:var(--muted);font-size:13px;}
+    .results{margin-top:14px;display:grid;gap:10px;}
+    .row{display:flex;gap:12px;align-items:flex-start;background:rgba(0,0,0,.30);border:1px solid rgba(212,175,55,.12);border-radius:18px;padding:12px;}
+    .thumb{width:74px;height:74px;border-radius:16px;object-fit:cover;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);flex:0 0 auto;}
+    .meta{flex:1}
+    .title{margin:0;font-size:15px;font-weight:800;letter-spacing:.2px;line-height:1.35;}
+    .sub{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.4;white-space:pre-wrap;}
+    .actions{display:flex;flex-direction:column;gap:8px;min-width:120px;}
+    .aBtn{text-decoration:none;text-align:center;border-radius:14px;padding:10px 10px;font-size:13px;font-weight:800;border:1px solid rgba(212,175,55,.25);background:rgba(0,0,0,.25);color:var(--text);cursor:pointer;}
+    .aBtn.primary{background:linear-gradient(180deg, var(--gold), var(--gold2));color:#121214;}
+    .hint{margin:12px 0 0;color:var(--muted);font-size:13px;line-height:1.5;}
+    .sideList{display:grid;gap:10px;}
+    .mini{padding:12px;border-radius:18px;border:1px solid rgba(212,175,55,.12);background:rgba(0,0,0,.25);}
+    .mini h3{margin:0 0 8px;font-size:14px}
+    .mini p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+    .fab{position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:10px;align-items:center;}
+    .fab button{cursor:pointer;border:none;border-radius:999px;padding:12px 14px;font-weight:900;background:linear-gradient(180deg, var(--gold), var(--gold2));color:#121214;box-shadow: 0 18px 44px rgba(212,175,55,.18);}
+    .fab small{color:var(--muted);background:rgba(0,0,0,.28);border:1px solid rgba(212,175,55,.12);padding:10px 12px;border-radius:999px;backdrop-filter: blur(8px);}
+    .drawer{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;z-index:9998;}
+    .drawer.on{display:block}
+    .panel{position:absolute;left:14px;bottom:14px;width:min(460px, calc(100vw - 28px));max-height:min(78vh, 680px);background:linear-gradient(180deg, rgba(18,18,20,.98), rgba(10,10,11,.98));border:1px solid rgba(212,175,55,.18);border-radius:24px;box-shadow: var(--shadow);overflow:hidden;display:flex;flex-direction:column;}
+    .panel .ph{padding:14px 14px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(212,175,55,.10);background:linear-gradient(180deg, rgba(212,175,55,.08), rgba(255,255,255,0));}
+    .xbtn{cursor:pointer;border:none;width:38px;height:38px;border-radius:14px;background:rgba(0,0,0,.35);color:var(--text);border:1px solid rgba(212,175,55,.14);}
+    .chat{padding:14px;overflow:auto;display:flex;flex-direction:column;gap:10px;}
+    .msg{max-width:92%;padding:10px 12px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:var(--text);font-size:14px;line-height:1.55;white-space:pre-wrap;}
+    .msg.me{align-self:flex-start;background:rgba(0,0,0,.33);border-color:rgba(212,175,55,.12);}
+    .msg.ai{align-self:flex-end;border-color:rgba(212,175,55,.12);background:rgba(212,175,55,.08);}
+    .composer{padding:12px;border-top:1px solid rgba(212,175,55,.10);display:flex;gap:10px;align-items:center;background:rgba(0,0,0,.25);}
+    .composer input{flex:1;background:rgba(0,0,0,.35);border:1px solid rgba(212,175,55,.18);color:var(--text);border-radius:14px;padding:12px 12px;outline:none;font-size:14px;}
+    .composer button{padding:12px 12px;border-radius:14px;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <h1><span style="color:var(--gold)">MAD</span> PARFUMEUR Assistant</h1>
+        <p>الموقع والبوت مبنيين فقط من ملفي: المنتجات + الفروع (داخل المشروع).</p>
+      </div>
+      <div class="pill" id="statusPill"><span class="dot"></span><span>Loading…</span></div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <div class="hd">
+          <h2>ابحث عن عطر / كود / فرع</h2>
+          <button class="btn secondary" id="btnClear">مسح</button>
+        </div>
+        <div class="bd">
+          <div class="searchRow">
+            <input class="input" id="q" placeholder='مثال: "ارماني سي" أو "W160" أو "حيفا" أو "חדרה" أو "fah"…' />
+            <button class="btn" id="btnSearch">بحث</button>
+          </div>
+
+          <div class="chips">
+            <span class="chip" data-q="رجالي">رجالي</span>
+            <span class="chip" data-q="نسائي">نسائي</span>
+            <span class="chip" data-q="نيش">نيش</span>
+            <span class="chip" data-q="فروع">فروع</span>
+            <span class="chip" data-q="חיפה">חיפה</span>
+            <span class="chip" data-q="حيفا">حيفا</span>
+          </div>
+
+          <div class="results" id="results"></div>
+
+          <p class="hint">
+            خدمة العملاء: <b dir="ltr">*99935</b> — اكتب "فروع" أو اسم مدينة وسيطلعلك ساعات + Waze + اتصال.
+          </p>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="hd"><h2>معلومات سريعة</h2></div>
+        <div class="bd sideList">
+          <div class="mini">
+            <h3>ماذا يفعل؟</h3>
+            <p>بحث بالمنتجات (كود/عربي/عبري/أصلي) + فروع (ساعات + Waze + اتصال) + شات مساعد بنفس الداتا.</p>
+          </div>
+          <div class="mini">
+            <h3>API Key</h3>
+            <p>لا أنصح تضع الـ API Key داخل GitHub Pages لأن أي شخص يقدر يراه. الأفضل Worker/Proxy إذا بدك AI لاحقاً.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="fab">
+    <button id="openAI">اسأل المساعد</button>
+    <small id="fabMeta">Loading…</small>
+  </div>
+
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="panel" role="dialog" aria-modal="true">
+      <div class="ph">
+        <div>
+          <b>MAD Assistant</b>
+          <div style="color:var(--muted); font-size:12px; margin-top:3px;">اقتراح عطور • מכירה חכמה • فروع</div>
+        </div>
+        <button class="xbtn" id="closeAI">×</button>
+      </div>
+      <div class="chat" id="chat"></div>
+      <div class="composer">
+        <input id="chatInput" placeholder='اكتب: اسم/كود/رجالي/نسائي/نيش/فروع…' />
+        <button class="btn" id="sendAI">إرسال</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./scripts/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+[
+  {
+    "id": 12,
+    "nameAr": "حيفا",
+    "nameHe": "חיפה",
+    "phone": "0506164130",
+    "directLink": "https://www.waze.com/en/live-map/directions/%D7%97%D7%99%D7%A4%D7%94?navigate=yes&place=99506.49&utm_campaign=default&utm_medium=lm_share_location&utm_source=waze_website",
+    "hoursAr": "يومياً: 10:00 - 22:00",
+    "hoursHe": "כל השבוע: 10:00 - 22:00"
+  },
+  {
+    "id": 4,
+    "nameAr": "تل أبيب - يافا",
+    "nameHe": "תל אביב-יפו",
+    "phone": "0527035370",
+    "directLink": "https://ul.waze.com/ul?place=EipEYXZpZCBSYXppJ2VsIFN0IDIzLCBUZWwgQXZpdi1ZYWZvLCBJc3JhZWwiMBIuChQKEgntsiS-vkwdFREv7GII8cikqxAXKhQKEgmHZ_csvEwdFRFa3i1EzNr69g&ll=32.05510440%2C34.75639440&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location",
+    "hoursAr": "الأحد-الأربعاء: 10:00-22:00<br>الخميس-الجمعة: 10:00-00:00<br>السبت: 10:00-22:00",
+    "hoursHe": "א'-ד': 10:00-22:00<br>ה'-ו': 10:00-00:00<br>שבת: 10:00-22:00"
+  },
+  {
+    "id": 3,
+    "nameAr": "الرمله",
+    "nameHe": "רמלה",
+    "phone": "0527035370",
+    "directLink": "https://www.waze.com/ul?ll=31.9260024,34.8763619&navigate=yes",
+    "hoursAr": "الأحد-الخميس: 09:00-21:00<br>الجمعة: 09:00-18:00<br>السبت: 14:00-21:00",
+    "hoursHe": "א'-ה': 09:00-21:00<br>שישי: 09:00-18:00<br>שבת: 14:00-21:00"
+  },
+  {
+    "id": 7,
+    "nameAr": "هيرتسيليا",
+    "nameHe": "הרצליה",
+    "phone": "0522438398",
+    "directLink": "https://waze.com/ul?q=Sokolov+14+Herzliya&navigate=yes",
+    "hoursAr": "الأحد-الخميس: 10:00-20:00<br>الجمعة: 10:00-15:00<br>السبت: مغلق ❌",
+    "hoursHe": "א'-ה': 10:00-20:00<br>שישי: 10:00-15:00<br>שבת: סגור ❌"
+  },
+  {
+    "id": 14,
+    "nameAr": "الخضيرة",
+    "nameHe": "חדרה",
+    "phone": "0523953681",
+    "directLink": "https://www.waze.com/ul?ll=32.4417243,34.8950613&navigate=yes",
+    "hoursAr": "يومياً: 10:00 - 22:00",
+    "hoursHe": "כל השבוע: 10:00 - 22:00"
+  },
+  {
+    "id": 24,
+    "nameAr": "يركا",
+    "nameHe": "ירכא",
+    "phone": "0546842420",
+    "directLink": "https://www.waze.com/ul?ll=32.947444,35.1740662&navigate=yes",
+    "hoursAr": "يومياً: 10:00 - 22:00",
+    "hoursHe": "כל יום: 10:00 - 22:00"
+  },
+  {
+    "id": 21,
+    "nameAr": "طمرة",
+    "nameHe": "טמרה",
+    "phone": "0505830733",
+    "directLink": "https://www.waze.com/ul?ll=32.8573682,35.1745076&navigate=yes",
+    "hoursAr": "يومياً: 10:00 - 22:00",
+    "hoursHe": "כל יום: 10:00 - 22:00"
+  },
+  {
+    "id": 23,
+    "nameAr": "جديدة المكر",
+    "nameHe": "ג׳דידה אלמכר",
+    "phone": "0508683838",
+    "directLink": "https://www.waze.com/ul?ll=32.9323979,35.1576085&navigate=yes",
+    "hoursAr": "يومياً: 11:00 - 21:00",
+    "hoursHe": "כל יום: 11:00 - 21:00"
+  },
+  {
+    "id": 22,
+    "nameAr": "سخنين",
+    "nameHe": "סחנין",
+    "phone": "0525335571",
+    "directLink": "https://www.waze.com/ul?ll=32.8620192,35.2982376&navigate=yes",
+    "hoursAr": "يومياً: 10:30 - 22:30",
+    "hoursHe": "כל יום: 10:30 - 22:30"
+  },
+  {
+    "id": 2,
+    "nameAr": "كفر مندا",
+    "nameHe": "כפר מנדא",
+    "phone": "0505102019",
+    "directLink": "https://ul.waze.com/ul?ll=32.80894429%2C35.26172519&navigate=yes&zoom=17&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location",
+    "hoursAr": "يومياً: 10:00 - 22:00",
+    "hoursHe": "כל יום: 10:00 - 22:00"
+  },
+  {
+    "id": 1,
+    "nameAr": "دالية الكرمل",
+    "nameHe": "דלית אל כרמל",
+    "phone": "0525592293",
+    "directLink": "https://waze.com/ul?q=Kiwi%20store%20Daliyat%20al-Karmel&navigate=yes",
+    "hoursAr": "يومياً: 10:00 - 22:00",
+    "hoursHe": "כל יום: 10:00 - 22:00"
+  }
+]
